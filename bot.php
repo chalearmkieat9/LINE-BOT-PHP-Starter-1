@@ -16,6 +16,10 @@ if (!is_null($events['events'])) {
 			$text = $event['message']['text'];
 			// Get replyToken
 			$replyToken = $event['replyToken'];
+			
+			if($text == 'whoami'){
+				$text = 'SAI Technology';
+			}
 
 			// Build message to reply back
 			$messages = [
