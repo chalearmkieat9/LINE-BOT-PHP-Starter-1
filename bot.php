@@ -20,7 +20,12 @@ if (!is_null($events['events'])) {
 			// Get groupId
 			$groupId = $event['source']['groupId'];
 			
-			$text = 'userId:'.$userId.'\ngroupId:'.$groupId;
+			if(!empty($userId)){
+				$text = 'userId:'.$userId;
+			}
+			else{
+				$text = 'groupId:'.$groupId;
+			}
 
 			// Build message to reply back
 			$messages = [
