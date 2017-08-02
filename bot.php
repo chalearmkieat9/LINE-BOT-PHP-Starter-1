@@ -1,7 +1,6 @@
 <?php
 
 $access_token = 'v1Dj2r4Kpr7QBTU/FAlxcVPNjsq7hbQ8c8m8MGNZ79VB3e0kTwBTpViLJ8grbnuLjD5kwIp/j0nRFVi01TR/l6c3D9jAqf4zbl+3WyrxqO71QXNtx6fNH2co8Pg1Zupj1TF9FY+7sacgE4ZyWpoz9gdB04t89/1O/w1cDnyilFU=';
-
 // Get POST body content
 $content = file_get_contents('php://input');
 // Parse JSON
@@ -13,20 +12,21 @@ if (!is_null($events['events'])) {
 		// Reply only when message sent is in 'text' format
 		if ($event['type'] == 'message' && $event['message']['type'] == 'text') {
 			// Get text sent
-			$text = $event['message']['text'];
+			$receive_text = $event['message']['text'];
 			// Get replyToken
 			$replyToken = $event['replyToken'];
+			// Get userId
+			$userId = $event['source']['userId'];
+			// Get groupId
+			$groupId = $event['source']['groupId'];
 			
-			if($text == 'whoami'){
-				$text = 'SAI Technology';
-			}
+			$text = 'userId:'.$userId.'\ngroupId:'.$groupId;
 
 			// Build message to reply back
 			$messages = [
 				'type' => 'text',
 				'text' => $text
 			];
-
 			// Make a POST Request to Messaging API to reply to sender
 			$url = 'https://api.line.me/v2/bot/message/reply';
 			$data = [
@@ -35,7 +35,6 @@ if (!is_null($events['events'])) {
 			];
 			$post = json_encode($data);
 			$headers = array('Content-Type: application/json', 'Authorization: Bearer ' . $access_token);
-
 			$ch = curl_init($url);
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -44,11 +43,9 @@ if (!is_null($events['events'])) {
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 			$result = curl_exec($ch);
 			curl_close($ch);
-
 			echo $result . "\r\n";
 		}
 	}
 }
-echo "OK";
 
 ?>
